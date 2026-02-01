@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Image Steganography</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        .msg { padding: 12px; margin-bottom: 15px; border-radius: 6px; font-weight: bold; }
+        .error-msg { background-color: #ffe0e0; color: #a40000; border: 1px solid #ff5c5c; }
+        .success-msg { background-color: #e6ffea; color: #006b1b; border: 1px solid #35c46a; }
+        .error-border { border: 2px solid red; }
+        #strengthText { font-weight: bold; display: block; margin-top: 5px; }
+        .weak { color: red; }
+        .medium { color: orange; }
+        .strong { color: green; }
+    </style>
+</head>
+<body>
+
+<nav class="horizontal-nav">
+    <div class="nav-brand">
+        <div class="mini-triangle"></div>
+        <span>Stego Triangle</span>
+    </div>
+    <div class="nav-menu">
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">🏠 Home</a>
+        <a href="/" class="{% if request.path == '/' %}active{% endif %}">Audio</a>
+        <a href="/image" class="{% if request.path == '/image' %}active{% endif %}">Image</a>
+        <a href="/video" class="{% if request.path == '/video' %}active{% endif %}">Video</a>
+        <div class="divider"></div>
+        <span class="user-tag">👤 {{ session['user'] }}</span>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</nav>
+
+<div id="indexPage" class="container">
+    <h1>🖼️ Secure Image Steganography</h1>
+    <p class="subtitle">Hide Secret Data Inside Image Files Securely</p>
+
+    {% if error %} <div id="msg" class="msg error-msg">{{ error }}</div> {% endif %}
+    {% if success %} <div id="msg" class="msg success-msg">{{ success }}</div> {% endif %}
+    
+    {% if secret_message %}
+        <div class="msg success-msg">
+            <strong>Extracted Message:</strong><br>
+            {{ secret_message }}
+        </div>
+    {% endif %}
+
+    <div class="card-container">
+        <a href="#" class="card" onclick="showPage('encodePage')">
+            <h2>🖼️ Encode</h2>
+            <p>Hide secret text inside image</p>
+        </a>
+
+        <a href="#" class="card" onclick="showPage('decodePage')">
+            <h2>🔓 Decode</h2>
+            <p>Extract hidden text from image</p>
+        </a>
+    </div>
+
+    <div style="margin-top: 40px; display:flex; justify-content:center; gap:20px;">
+        <a href="/">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 22px; background:#35c46a; color:white; border-radius:6px; border:none; cursor:pointer;">
+                ⬅ Audio Stego
+            </button>
+        </a>
+        <a href="/video">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 22px; background:#2563eb; color:white; border-radius:6px; border:none; cursor:pointer;">
+                🎥 Video Stego
+            </button>
+        </a>
+    </div>
+</div>
+
+<div id="encodePage" class="container" style="display:none;">
+    <h1>Encode Image</h1>
+    <div class="form-box">
+        <form action="/image_encode" method="POST" enctype="multipart/form-data">
+            <label>Upload Image File (.png / .jpg)</label>
+            <input type="file" name="image" required>
+
+            <label>Enter Secret Message</label>
+            <textarea name="message" rows="3" required></textarea>
+
+            <label>Enter Password</label>
+            <input type="password" name="password" id="pwd_enc" placeholder="Enter password" onkeyup="checkStrength('pwd_enc')" required>
+            <small id="strengthText"></small>
+
+            <button type="submit">Encode & Download</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<div id="decodePage" class="container" style="display:none;">
+    <h1>Decode Image</h1>
+    <div class="form-box">
+        <form id="decodeForm" action="/image_decode" method="POST" enctype="multipart/form-data">
+            <label>Upload Stego Image</label>
+            <input type="file" name="image" required>
+
+            <label>Enter Password</label>
+            <input type="password" name="password" id="pwd_dec" placeholder="Enter password" 
+                   onkeyup="checkStrength('pwd_dec')" 
+                   {% if highlight_password %}class="error-border"{% endif %} required>
+            <small id="strengthText"></small>
+
+            <button type="submit">Decode</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<footer>
+    <p>© 2026 Secure Steganography | BCA Final Year Project</p>
+</footer>
+
+<script>
+function showPage(pageId) {
+    document.getElementById('indexPage').style.display = 'none';
+    document.getElementById('encodePage').style.display = 'none';
+    document.getElementById('decodePage').style.display = 'none';
+    document.getElementById(pageId).style.display = 'block';
+}
+
+function checkStrength(inputId) {
+    const pwd = document.getElementById(inputId).value;
+    const strengthText = document.getElementById(inputId).nextElementSibling;
+
+    if (!pwd) return;
+
+    if (pwd.length < 8) {
+        strengthText.textContent = "❌ Too short (min 8 chars)";
+        strengthText.className = "weak";
+        return;
+    }
+
+    let strength = 0;
+    if (/[a-z]/.test(pwd)) strength++;
+    if (/[A-Z]/.test(pwd)) strength++;
+    if (/[0-9]/.test(pwd)) strength++;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+
+    if (strength <= 2) {
+        strengthText.textContent = "⚠️ Weak password";
+        strengthText.className = "weak";
+    } else if (strength === 3) {
+        strengthText.textContent = "🟡 Medium password";
+        strengthText.className = "medium";
+    } else {
+        strengthText.textContent = "✅ Strong password";
+        strengthText.className = "strong";
+    }
+}
+
+setTimeout(() => {
+    const msg = document.getElementById("msg");
+    if (msg) msg.style.display = "none";
+}, 3000);
+</script>
+
+</body>
+</html>

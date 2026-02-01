@@ -1,0 +1,239 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: white;
+    min-height: 100vh;
+}
+
+.container {
+    text-align: center;
+    padding-top: 60px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    margin-bottom: 40px;
+}
+
+/* --- CARDS & LAYOUT --- */
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.card {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 15px;
+    padding: 40px;
+    width: 250px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: #3b82f6;
+}
+
+/* --- FORMS & INPUTS --- */
+
+.form-box {
+    background: #020617;
+    border: 1px solid #1e293b;
+    width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #cbd5f5;
+}
+
+/* Updated to support Login/Register fields */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    outline: none;
+    background: #1e293b;
+    color: white;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
+}
+
+/* --- BUTTONS --- */
+
+button, .nav-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+button:hover, .nav-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* --- STEGO TRIANGLE BRANDING --- */
+
+.triangle-logo {
+    width: 0;
+    height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 70px solid #3b82f6; 
+    margin: 0 auto 20px auto;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+}
+
+/* Password eye positioning */
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #94a3b8;
+}
+
+/* --- MESSAGES & FOOTER --- */
+
+.msg {
+    padding: 12px;
+    margin: 10px auto 20px auto;
+    width: 400px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.error-msg { background-color: #ffe0e0; color: #a40000; border: 1px solid #ff5c5c; }
+.success-msg { background-color: #e6ffea; color: #006b1b; border: 1px solid #35c46a; }
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 50px;
+    width: 100%;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 20px;
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+/* --- Horizontal Top Navigation --- */
+.horizontal-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #020617; 
+    padding: 15px 8%;
+    border-bottom: 1px solid #1e293b;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.mini-triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 18px solid #3b82f6;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-menu a:hover, .nav-menu a.active {
+    color: #3b82f6;
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background-color: #1e293b;
+}
+
+.user-tag {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.logout-link {
+    color: #ff5c5c !important;
+    border: 1px solid #ff5c5c;
+    padding: 6px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.logout-link:hover {
+    background-color: #ff5c5c;
+    color: white !important;
+}

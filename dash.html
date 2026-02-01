@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Stego Triangle</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="horizontal-nav">
+        <div class="nav-brand">
+            <div class="mini-triangle"></div>
+            <span>Stego Triangle</span>
+        </div>
+        <div class="nav-menu">
+            <a href="/dashboard" class="active">🏠 Home</a>
+            <a href="/">Audio</a>
+            <a href="/image">Image</a>
+            <a href="/video">Video</a>
+            <div class="divider"></div>
+            <span class="user-tag">👤 {{ session['user'] }}</span>
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome, {{ session['user'] }}</h1>
+        <p class="subtitle">Select a module to secure your data</p>
+        <div class="card-container">
+            <a href="/" class="card"><h2>🎵 Audio</h2><p>LSB in WAV</p></a>
+            <a href="/image" class="card"><h2>🖼️ Image</h2><p>LSB in PNG/JPG</p></a>
+            <a href="/video" class="card"><h2>🎥 Video</h2><p>Frame Stego</p></a>
+        </div>
+    </div>
+</body>
+</html>

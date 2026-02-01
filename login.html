@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Stego Triangle</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="triangle-logo"></div>
+        
+        <h1>Stego Triangle</h1>
+        <p class="subtitle">Secure Authentication Portal</p>
+
+        {% if error %} <div class="msg error-msg">{{ error }}</div> {% endif %}
+        {% if success %} <div class="msg success-msg">{{ success }}</div> {% endif %}
+
+        <div class="form-box">
+            <form action="/login" method="POST">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+
+                <label>Password</label>
+                <div style="position: relative;">
+                    <input type="password" name="password" id="loginPassword" placeholder="Enter your password" required>
+                    <i class="far fa-eye" id="togglePassword" style="position: absolute; right: 15px; top: 15px; cursor: pointer; color: #94a3b8;"></i>
+                </div>
+
+                <button type="submit" class="nav-btn">Access Vault</button>
+            </form>
+            
+            <p style="margin-top:20px; color:#94a3b8;">
+                First time? <a href="/register" style="color:#3b82f6; text-decoration:none; font-weight:bold;">Create an Account</a>
+            </p>
+        </div>
+
+        <footer>
+            <p>© 2026 Stego Triangle | BCA Final Year Project</p>
+        </footer>
+    </div>
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#loginPassword');
+
+        togglePassword.addEventListener('click', function (e) {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // Toggle the eye icon
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+</body>
+</html>

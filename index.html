@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Audio Steganography</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        .msg {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .error-msg {
+            background-color: #ffe0e0;
+            color: #a40000;
+            border: 1px solid #ff5c5c;
+        }
+
+        .success-msg {
+            background-color: #e6ffea;
+            color: #006b1b;
+            border: 1px solid #35c46a;
+        }
+
+        .error-border {
+            border: 2px solid red;
+        }
+
+        #strengthText {
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .weak { color: red; }
+        .medium { color: orange; }
+        .strong { color: green; }
+    </style>
+</head>
+<body>
+
+<nav class="horizontal-nav">
+    <div class="nav-brand">
+        <div class="mini-triangle"></div>
+        <span>Stego Triangle</span>
+    </div>
+    <div class="nav-menu">
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">🏠 Home</a>
+        <a href="/" class="{% if request.path == '/' %}active{% endif %}">Audio</a>
+        <a href="/image" class="{% if request.path == '/image' %}active{% endif %}">Image</a>
+        <a href="/video" class="{% if request.path == '/video' %}active{% endif %}">Video</a>
+        <div class="divider"></div>
+        <span class="user-tag">👤 {{ session['user'] }}</span>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</nav>
+
+<div id="indexPage" class="container">
+    <header>
+        <h1>🔐 Secure Audio Steganography</h1>
+        <p class="subtitle">Hide Secret Data Inside Audio Files Securely</p>
+    </header>
+
+    {% if error %}
+        <div id="msg" class="msg error-msg">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+        <div id="msg" class="msg success-msg">{{ success }}</div>
+    {% endif %}
+
+    <div class="card-container">
+        <a href="#" class="card" onclick="showPage('encodePage')">
+            <h2>🎧 Encode</h2>
+            <p>Hide secret file inside audio</p>
+        </a>
+
+        <a href="#" class="card" onclick="showPage('decodePage')">
+            <h2>🔓 Decode</h2>
+            <p>Extract hidden file from audio</p>
+        </a>
+    </div>
+
+    <div style="margin-top: 40px; display:flex; justify-content:center; gap:20px;">
+        <a href="/image">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 22px; background:#3b82f6; color:white; border-radius:6px; border:none; cursor:pointer;">
+                🖼️ Image Steganography
+            </button>
+        </a>
+        <a href="/video">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 22px; background:#2563eb; color:white; border-radius:6px; border:none; cursor:pointer;">
+                🎥 Video Steganography
+            </button>
+        </a>
+    </div>
+</div>
+
+<div id="encodePage" class="container" style="display:none;">
+    <h1>Encode Audio</h1>
+    <div class="form-box">
+        <form action="/encode" method="POST" enctype="multipart/form-data">
+            <label>Upload Audio File (.wav)</label>
+            <input type="file" name="audio" required>
+
+            <label>Upload Secret File</label>
+            <input type="file" name="secret" required>
+
+            <label>Enter Password</label>
+            <input type="password" name="password" id="password_enc" placeholder="Enter password" onkeyup="checkStrength('password_enc')" required>
+            <small id="strengthText_enc"></small>
+
+            <button type="submit">Encode & Download</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<div id="decodePage" class="container" style="display:none;">
+    <h1>Decode Audio</h1>
+    <div class="form-box">
+        <form id="decodeForm" action="/decode" method="POST" enctype="multipart/form-data">
+            <label>Upload Stego Audio (.wav)</label>
+            <input type="file" name="audio" required>
+
+            <label>Enter Password</label>
+            <input type="password" name="password" id="password_dec" placeholder="Enter password" 
+                   onkeyup="checkStrength('password_dec')" 
+                   {% if highlight_password %}class="error-border"{% endif %} required>
+            <small id="strengthText_dec"></small>
+
+            <button type="submit">Decode & Download</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<footer>
+    <p>© 2026 Secure Audio Steganography | BCA Final Year Project</p>
+</footer>
+
+<script>
+function showPage(pageId) {
+    document.getElementById('indexPage').style.display = 'none';
+    document.getElementById('encodePage').style.display = 'none';
+    document.getElementById('decodePage').style.display = 'none';
+    document.getElementById(pageId).style.display = 'block';
+}
+
+function checkStrength(inputId) {
+    const pwd = document.getElementById(inputId).value;
+    const strengthText = document.getElementById(inputId).nextElementSibling;
+
+    if (pwd.length < 8) {
+        strengthText.textContent = "❌ Too short (min 8 characters)";
+        strengthText.className = "weak";
+        return;
+    }
+
+    let strength = 0;
+    if (/[a-z]/.test(pwd)) strength++;
+    if (/[A-Z]/.test(pwd)) strength++;
+    if (/[0-9]/.test(pwd)) strength++;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+
+    if (strength <= 2) {
+        strengthText.textContent = "⚠️ Weak password";
+        strengthText.className = "weak";
+    } else if (strength === 3) {
+        strengthText.textContent = "🟡 Medium password";
+        strengthText.className = "medium";
+    } else {
+        strengthText.textContent = "✅ Strong password";
+        strengthText.className = "strong";
+    }
+}
+
+setTimeout(() => {
+    const msg = document.getElementById("msg");
+    if (msg) msg.style.display = "none";
+}, 3000);
+</script>
+
+</body>
+</html>

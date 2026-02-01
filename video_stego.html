@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Video Steganography</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="horizontal-nav">
+    <div class="nav-brand">
+        <div class="mini-triangle"></div>
+        <span>Stego Triangle</span>
+    </div>
+    <div class="nav-menu">
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">🏠 Home</a>
+        <a href="/" class="{% if request.path == '/' %}active{% endif %}">Audio</a>
+        <a href="/image" class="{% if request.path == '/image' %}active{% endif %}">Image</a>
+        <a href="/video" class="{% if request.path == '/video' %}active{% endif %}">Video</a>
+        <div class="divider"></div>
+        <span class="user-tag">👤 {{ session['user'] }}</span>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</nav>
+
+<div id="indexPage" class="container">
+    <h1>📹 Secure Video Steganography</h1>
+    <p class="subtitle">Hide Secret Information Inside Video Files</p>
+
+    <div class="card-container">
+        <a href="#" class="card" onclick="showPage('encodePage')">
+            <h2>Encode</h2>
+            <p>Hide secret message inside video</p>
+        </a>
+
+        <a href="#" class="card" onclick="showPage('decodePage')">
+            <h2>Decode</h2>
+            <p>Extract hidden message from video</p>
+        </a>
+    </div>
+
+    <div style="margin-top: 40px; display:flex; justify-content:center; gap:20px;">
+        <a href="/">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 20px; background:#35c46a; color:white; border-radius:6px; border:none; cursor:pointer;">
+                ⬅ Audio Steganography
+            </button>
+        </a>
+        <a href="/image">
+            <button type="button" class="nav-btn" style="width:auto; padding:10px 20px; background:#2563eb; color:white; border-radius:6px; border:none; cursor:pointer;">
+                🖼️ Image Steganography
+            </button>
+        </a>
+    </div>
+</div>
+
+<div id="encodePage" class="container" style="display:none;">
+    <h1>Encode Video</h1>
+    <div class="form-box">
+        <form action="/video_encode" method="POST" enctype="multipart/form-data">
+            <label>Select Video File</label>
+            <input type="file" name="video" required>
+
+            <label>Secret Message</label>
+            <textarea name="secret" placeholder="Enter secret message" required></textarea>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required>
+
+            <button type="submit">Encode & Download</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<div id="decodePage" class="container" style="display:none;">
+    <h1>Decode Video</h1>
+    <div class="form-box">
+        <form action="/video_decode" method="POST" enctype="multipart/form-data">
+            <label>Select Stego Video</label>
+            <input type="file" name="video" required>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required>
+
+            <button type="submit">Decode & Download</button>
+        </form>
+    </div>
+    <a href="#" class="back" onclick="showPage('indexPage')">⬅ Back</a>
+</div>
+
+<footer>
+    <p>© 2026 Secure Steganography | BCA Final Year Project</p>
+</footer>
+
+<script>
+    function showPage(pageId) {
+        document.getElementById('indexPage').style.display = 'none';
+        document.getElementById('encodePage').style.display = 'none';
+        document.getElementById('decodePage').style.display = 'none';
+        document.getElementById(pageId).style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Stego Triangle</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="triangle-logo"></div>
+
+        <header>
+            <h1>Join Stego Triangle</h1>
+            <p class="subtitle">Create your secure vault credentials</p>
+        </header>
+
+        {% if error %}
+            <div class="msg error-msg">{{ error }}</div>
+        {% endif %}
+
+        <div class="form-box">
+            <form action="/register" method="POST">
+                <label>Choose Username</label>
+                <input type="text" name="username" placeholder="Pick a unique username" required>
+
+                <label>Choose Password</label>
+                <div class="password-container">
+                    <input type="password" name="password" id="regPassword" placeholder="Create a strong password" required>
+                    <i class="far fa-eye" id="toggleRegPassword"></i>
+                </div>
+
+                <button type="submit" class="nav-btn" style="background:#10b981;">Complete Registration</button>
+            </form>
+            
+            <p style="margin-top:20px; color:#94a3b8;">
+                Already a member? <a href="/login" style="color:#3b82f6; text-decoration:none; font-weight:bold;">Login here</a>
+            </p>
+        </div>
+
+        <footer>
+            <p>© 2026 Stego Triangle | BCA Final Year Project</p>
+        </footer>
+    </div>
+
+    <script>
+        const toggleRegPassword = document.querySelector('#toggleRegPassword');
+        const passwordField = document.querySelector('#regPassword');
+
+        toggleRegPassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle the eye / eye-slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+</body>
+</html>
